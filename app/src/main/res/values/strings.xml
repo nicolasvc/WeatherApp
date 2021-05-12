@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="splash_screen">SPlash Screen</string>
+    <string name="nombre_ciudad">Nombre ciudad</string>
+    <string name="fecha_dispositivo">Fecha dispositivo</string>
+    <string name="_27">27</string>
+    <string name="_34_26">34/26</string>
+    <string name="cloudy">Cloudy</string>
+    <string name="_7_dias_reporte_del_clima">7 dias reporte del clima</string>
+    <string name="detalles_del_clima">Detalles del clima</string>
+    <string name="valor_temperatura">Valor Temperatura</string>
+    <string name="temperatura">Temperatura</string>
+    <string name="valor_visibilidad">Valor visibilidad</string>
+    <string name="visibilidad">Visibilidad</string>
+    <string name="valor_presi_n_aire">Valor presión aire</string>
+    <string name="presi_n_aire">Presión aire</string>
+    <string name="humedad">Humedad</string>
+    <string name="valor_humedad">Valor humedad</string>
+    <string name="direcci_n_viento">Dirección viento</string>
+    <string name="valor_velocidad_viento">Valor velocidad viento</string>
+    <string name="uv">Uv</string>
+    <string name="valor_rayos_uv">Valor rayos uv</string>
+    <string name="imagen_nube">Imagen nube</string>
+    <string name="agregar_ciudad">Agregar ciudad</string>
+    <string name="estado_clima">Estado clima</string>
+    <string name="ingresa_ciudad">Ingresa ciudad</string>
 </resources>

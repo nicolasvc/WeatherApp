@@ -4,6 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".vista.InformacionClimaActivity.splashActivity.SplashActivity">
+    android:background="#454555"
+    tools:context=".vista.splashscreen.SplashActivity">
 
+    <ImageView
+        android:id="@+id/imageViewSplash"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:background="#303233"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/splash_weather"
+        android:contentDescription="@string/splash_screen" />
 </androidx.constraintlayout.widget.ConstraintLayout>
