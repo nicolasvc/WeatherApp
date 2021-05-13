@@ -1,4 +1,4 @@
-package com.example.weatherapp.vista.consultarclimaciudad
+package com.example.weatherapp.ui.consultarclimaciudad
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
-import com.example.weatherapp.entidades.busquedaciudad.CiudadElegida
+import com.example.weatherapp.origendatos.room.entidades.CiudadSeleccionadaEntity
 import com.google.android.flexbox.FlexboxLayout
 
-class RecyclerViewCiudades(
-    private var listaCiudades: List<CiudadElegida>,
+class RecyclerViewCiudadesAdapter(
+    private var listaCiudades: List<CiudadSeleccionadaEntity>,
     private val context: Context
-) : RecyclerView.Adapter<RecyclerViewCiudades.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerViewCiudadesAdapter.ViewHolder>() {
 
 
     //region Sobrecarga
@@ -25,11 +25,10 @@ class RecyclerViewCiudades(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (listaCiudades.isEmpty()) return
-
         val ciudad = listaCiudades[position]
         holder.tv_temperatura_ciudad.text =
             String.format("%s °C", ciudad.temperaturaCiudad.toString())
-        holder.tv_ciudad_elegida.text = ciudad.title
+        holder.tv_ciudad_elegida.text = ciudad.nombreciudad
         holder.tv_tipo_clima.text = ciudad.estadoClima
         holder.flexboxLayout.setBackgroundColor(context.resources.getColor(R.color.colorclimadia))
     }
@@ -49,6 +48,10 @@ class RecyclerViewCiudades(
         override fun toString(): String {
             return super.toString() + " '"
         }
+    }
+
+    fun setListaCiudades(listaCiudades: List<CiudadSeleccionadaEntity>){
+        this.listaCiudades = listaCiudades
     }
     //endregion
 

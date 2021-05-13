@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:id="@+id/coordinatorContenedor"
     android:layout_height="match_parent"
-    tools:context=".vista.consultarclimaciudad.ConsultaCiudadClimaActivity">
+    tools:context=".ui.consultarclimaciudad.ConsultaCiudadClimaActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,9 +21,8 @@
     </LinearLayout>
 
 
-    <EditText
-        android:id="@+id/editTextConsultaCiudad"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteCiudad"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -31,6 +30,8 @@
         android:layout_marginEnd="16dp"
         android:autofillHints="Bogotá"
         android:ems="10"
+        android:imeOptions="flagNoExtractUi"
+        android:completionThreshold="1"
         android:hint="@string/ingresa_ciudad"
         android:inputType="textPersonName"
         android:textSize="18sp"
@@ -42,10 +43,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="409dp"
         android:layout_height="592dp"
+        android:id="@+id/recyclerCiudadesElegidas"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextConsultaCiudad"
+        app:layout_constraintTop_toBottomOf="@+id/autoCompleteCiudad"
         tools:listitem="@layout/item_ciudades_elegidas"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,4 +24,12 @@
     <string name="agregar_ciudad">Agregar ciudad</string>
     <string name="estado_clima">Estado clima</string>
     <string name="ingresa_ciudad">Ingresa ciudad</string>
+    <string name="cargando_clima">Cargando clima</string>
+    <string name="eliminar_ciudades">Eliminar ciudades</string>
+    <string name="termometro">Termometro</string>
+    <string name="presi_n">Presión</string>
+    <string name="velocidadviento">VelocidadViento</string>
+    <string name="velocidad">Velocidad</string>
+    <string name="direccion_viento">Direccion viento</string>
+    <string name="temp">Temp</string>
 </resources>

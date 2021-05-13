@@ -13,9 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".vista.consultarclimaciudad.ConsultaCiudadClimaActivity"
+        <activity android:name=".ui.consultarclimaciudad.ConsultaCiudadClimaActivity"
             android:label="Ciudades elegidas"/>
-        <activity android:name=".vista.splashscreen.SplashActivity">
+        <activity android:name=".ui.splashscreen.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".vista.informacionclima.InformacionClimaActivity"
+            android:name=".ui.informacionclima.InformacionClimaActivity"
             android:label="" />
     </application>
 

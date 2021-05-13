@@ -1,9 +1,10 @@
-package com.example.weatherapp.origendatos.repositorio
+package com.example.weatherapp.origendatos.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.weatherapp.entidades.busquedaciudad.CiudadBuscada
 import com.example.weatherapp.entidades.climaciudad.ClimaCiudad
+import com.example.weatherapp.origendatos.repository.InformacionClimaRepositorio
 
 class InformacionClimaViewModel : ViewModel(){
 

@@ -1,10 +1,11 @@
-package com.example.weatherapp.vista.informacionclima
+package com.example.weatherapp.ui.informacionclima
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,11 +13,13 @@ import com.example.weatherapp.R
 import com.example.weatherapp.entidades.busquedaciudad.CiudadBuscada
 import com.example.weatherapp.entidades.climaciudad.ClimaCiudad
 import com.example.weatherapp.entidades.climaciudad.ConsolidatedWeather
-import com.example.weatherapp.origendatos.repositorio.InformacionClimaViewModel
-import com.example.weatherapp.transversales.constantes.CodigoIntencion
+import com.example.weatherapp.origendatos.room.entidades.CiudadSeleccionadaEntity
+import com.example.weatherapp.origendatos.viewmodel.CiudadElegidaViewModel
+import com.example.weatherapp.origendatos.viewmodel.InformacionClimaViewModel
+import com.example.weatherapp.transversales.constantes.ConstantesCompartidas
 import com.example.weatherapp.transversales.constantes.ConstantesPreferencias
 import com.example.weatherapp.transversales.preferencias.PreferenciasManager
-import com.example.weatherapp.vista.consultarclimaciudad.ConsultaCiudadClimaActivity
+import com.example.weatherapp.ui.consultarclimaciudad.ConsultaCiudadClimaActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.grid_layout_detalle_clima.*
 import kotlinx.android.synthetic.main.toolbar_base.*
@@ -24,7 +27,12 @@ import kotlinx.android.synthetic.main.toolbar_base.*
 
 class InformacionClimaActivity : AppCompatActivity() {
 
+    //region Propiedades
     private lateinit var informacionClimaViewModel: InformacionClimaViewModel
+    private lateinit var ciudadesElegidaViewModel: CiudadElegidaViewModel
+    private var isNuevaCiudad:Boolean = false
+    //endregion
+
 
     //region Sobrecarga
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +42,6 @@ class InformacionClimaActivity : AppCompatActivity() {
         iniciarViewModel()
         verificarCiudadElegida()
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_busqueda_ciudad, menu)
@@ -46,12 +53,6 @@ class InformacionClimaActivity : AppCompatActivity() {
             navegarSeleccionCiudad()
         return super.onOptionsItemSelected(item)
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == CodigoIntencion.CODIGO_INTENCION_OBTENER_CIUDAD)
-            data?.getStringExtra("IdCiudad")?.let { consultarClimaCiudad(it) }
-        super.onActivityResult(requestCode, resultCode, data)
-    }
     //endregion
 
 
@@ -59,6 +60,7 @@ class InformacionClimaActivity : AppCompatActivity() {
     private fun iniciarViewModel() {
         informacionClimaViewModel =
             ViewModelProvider(this).get(InformacionClimaViewModel::class.java)
+        ciudadesElegidaViewModel = ViewModelProvider(this).get(CiudadElegidaViewModel::class.java)
     }
 
     private fun verificarCiudadElegida() {
@@ -70,9 +72,20 @@ class InformacionClimaActivity : AppCompatActivity() {
             navegarSeleccionCiudad()
     }
 
+
+    private var resultadoActividad =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                val idCiudad = data!!.getStringExtra(ConstantesCompartidas.LLAVE_ID_CIUDAD_INTENT)
+                consultarClimaCiudad(idCiudad!!)
+            }
+        }
+
+
     private fun navegarSeleccionCiudad() {
-        val intentCiudad = Intent(this, ConsultaCiudadClimaActivity::class.java)
-        startActivityForResult(intentCiudad, CodigoIntencion.CODIGO_INTENCION_OBTENER_CIUDAD)
+        val intent = Intent(this, ConsultaCiudadClimaActivity::class.java)
+        resultadoActividad.launch(intent)
     }
 
 
@@ -82,12 +95,27 @@ class InformacionClimaActivity : AppCompatActivity() {
 
     private fun consultarClimaCiudad(idCiudad: String) {
         informacionClimaViewModel.obtenerClimaCiudad(idCiudad).observe(
-            this, {
-                llenarInformacionUI(it!!)
-                llenarRecyclerView(it.consolidatedWeather)
+            this, { climaCiudad ->
+                almacenarCiudad(climaCiudad)
+                llenarInformacionUI(climaCiudad!!)
+                llenarRecyclerView(climaCiudad.consolidatedWeather)
             }
         )
     }
+
+    private fun almacenarCiudad(climaCiudad: ClimaCiudad){
+        if(isNuevaCiudad){
+            val ciudadEntity = CiudadSeleccionadaEntity(
+                climaCiudad.consolidatedWeather[0].theTemp.toInt(),
+                climaCiudad.consolidatedWeather[0].weatherStateName,
+                climaCiudad.woeid.toString(),
+                climaCiudad.title
+            )
+            ciudadesElegidaViewModel.insertCiudad(ciudadEntity)
+        }
+
+    }
+
 
     private fun llenarRecyclerView(consolidatedWeather: List<ConsolidatedWeather>) {
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -96,9 +124,9 @@ class InformacionClimaActivity : AppCompatActivity() {
         adaptador.notifyDataSetChanged()
     }
 
-    private fun llenarInformacionUI(it: ClimaCiudad) {
-        val climaConsolidado = it.consolidatedWeather[0]
-        nombreCiudad.text = it.title
+    private fun llenarInformacionUI(climaCiudad: ClimaCiudad) {
+        val climaConsolidado = climaCiudad.consolidatedWeather[0]
+        nombreCiudad.text = climaCiudad.title
         tv_fecha_dipositivo.text = climaConsolidado.applicableDate
         tv_temperatura_ciudad.text = String.format("%s°", climaConsolidado.theTemp.toInt())
         tv_temperatura_max_min.text = String.format(
@@ -109,7 +137,7 @@ class InformacionClimaActivity : AppCompatActivity() {
         tv_estado_ciudad.text = climaConsolidado.weatherStateName
         tvvalortemperatura.text = String.format("%s°", climaConsolidado.theTemp.toInt())
         tv_cantidad_dias_clima.text =
-            String.format("%s Dias reporte del clima", it.consolidatedWeather.size)
+            String.format("%s Dias reporte del clima", climaCiudad.consolidatedWeather.size)
         tvvisibilidad.text = String.format("%s km", climaConsolidado.visibility.toInt())
         tvpresionaire.text = String.format("%s hPa", climaConsolidado.airPressure.toInt())
         tvvalorHumedad.text = String.format("%s", climaConsolidado.humidity)

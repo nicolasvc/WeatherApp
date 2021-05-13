@@ -1,4 +1,4 @@
-package com.example.weatherapp.origendatos.repositorio
+package com.example.weatherapp.origendatos.repository
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData

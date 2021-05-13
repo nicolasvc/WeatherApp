@@ -1,10 +1,10 @@
-package com.example.weatherapp.vista.splashscreen
+package com.example.weatherapp.ui.splashscreen
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.weatherapp.R
-import com.example.weatherapp.vista.informacionclima.InformacionClimaActivity
+import com.example.weatherapp.ui.informacionclima.InformacionClimaActivity
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : AppCompatActivity() {

@@ -17,6 +17,7 @@
     <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
         android:id="@+id/flexBoxcontenedor"
+        android:background="@color/colorclimadia"
         android:layout_height="wrap_content">
 
         <com.google.android.flexbox.FlexboxLayout
@@ -31,6 +32,8 @@
             <com.google.android.flexbox.FlexboxLayout
                 android:layout_width="match_parent"
                 app:alignItems="baseline"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/tv_temperatura_ciudad_item"
@@ -38,10 +41,11 @@
                     android:layout_height="wrap_content"
                     app:layout_flexBasisPercent="20%"
                     android:gravity="left"
-                    android:layout_marginStart="5dp"
+                    android:textSize="25sp"
+                    android:layout_marginStart="15dp"
                     android:textColor="@color/white"
                     android:layout_marginEnd="5dp"
-                    android:text="Dia clima" />
+                    android:text="@string/temp" />
 
                 <TextView
                     android:id="@+id/tv_nombre_ciudad_elegida"
@@ -49,10 +53,10 @@
                     android:layout_height="wrap_content"
                     app:layout_flexBasisPercent="80%"
                     android:gravity="end"
-                    android:layout_marginStart="5dp"
+                    android:textSize="14sp"
                     android:textColor="@color/white"
-                    android:layout_marginEnd="5dp"
-                    android:text="Dia clima" />
+                    android:layout_marginEnd="15dp"
+                    android:text="@string/nombre_ciudad" />
 
             </com.google.android.flexbox.FlexboxLayout>
 
@@ -64,11 +68,12 @@
                     android:id="@+id/tv_tipo_clima"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="14sp"
                     app:layout_flexBasisPercent="100%"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="15dp"
                     android:textColor="@color/white"
-                    android:layout_marginEnd="5dp"
-                    android:text="Dia clima" />
+                    android:layout_marginEnd="15dp"
+                    android:text="@string/estado_clima" />
 
             </com.google.android.flexbox.FlexboxLayout>
         </com.google.android.flexbox.FlexboxLayout>

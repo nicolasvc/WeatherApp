@@ -26,10 +26,12 @@
             android:layout_gravity="center_horizontal|center_vertical"
             android:layout_margin="16dp"
             android:orientation="vertical"
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
         <ImageView
+            android:contentDescription="@string/termometro"
             android:src="@drawable/ic_termometro"
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
@@ -39,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Temperatura"/>
+                android:text="@string/temperatura"/>
 
             <TextView
                 android:id="@+id/tvvalortemperatura"
@@ -68,10 +70,12 @@
             android:layout_gravity="center_horizontal|center_vertical"
             android:layout_margin="16dp"
             android:orientation="vertical"
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <ImageView
+                android:contentDescription="@string/visibilidad"
                 android:src="@drawable/ic_visibility"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
@@ -80,7 +84,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Visibilidad"/>
+                android:text="@string/visibilidad"/>
 
             <TextView
                 android:id="@+id/tvvisibilidad"
@@ -111,9 +115,11 @@
             android:layout_margin="16dp"
             android:orientation="vertical"
             android:layout_width="wrap_content"
+            android:gravity="center"
             android:layout_height="wrap_content">
 
             <ImageView
+                android:contentDescription="@string/presi_n"
                 android:src="@drawable/ic_gauge"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
@@ -122,7 +128,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Presión"/>
+                android:text="@string/presi_n"/>
 
             <TextView
                 android:id="@+id/tvpresionaire"
@@ -141,6 +147,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_columnWeight="1"
+
         app:layout_rowWeight="1"
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
@@ -153,9 +160,11 @@
             android:layout_margin="16dp"
             android:orientation="vertical"
             android:layout_width="wrap_content"
+            android:gravity="center"
             android:layout_height="wrap_content">
 
             <ImageView
+                android:contentDescription="@string/humedad"
                 android:src="@drawable/ic_agua"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
@@ -164,7 +173,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Humedad"/>
+                android:text="@string/humedad"/>
 
             <TextView
                 android:id="@+id/tvvalorHumedad"
@@ -194,10 +203,12 @@
             android:layout_gravity="center_horizontal|center_vertical"
             android:layout_margin="16dp"
             android:orientation="vertical"
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <ImageView
+                android:contentDescription="@string/velocidadviento"
                 android:src="@drawable/ic_viento"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
@@ -206,7 +217,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dirección"/>
+                android:text="@string/velocidad"/>
 
             <TextView
                 android:id="@+id/tvvalordireccionviento"
@@ -234,17 +245,24 @@
 
         <LinearLayout
             android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_margin="16dp"
+            android:layout_margin="14dp"
+            android:gravity="center"
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:src="@drawable/ic_cloud"
+                android:contentDescription="@string/direccion_viento"
+                android:src="@drawable/ic_brujula"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/direcci_n_viento"/>
             <TextView
                 android:id="@+id/tvdirecconviento"
                 android:layout_width="wrap_content"
