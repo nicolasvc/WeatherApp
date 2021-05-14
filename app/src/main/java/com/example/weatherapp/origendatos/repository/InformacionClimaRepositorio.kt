@@ -15,7 +15,6 @@ class InformacionClimaRepositorio {
     private lateinit var listaCiudades: MutableLiveData<List<CiudadBuscada>>
 
 
-    //TODO LEER COMO CONTROLAR ERROR DENTRO DE LIVEDATA
     fun obtenerClimaCiudad(idCiudad: String): MutableLiveData<ClimaCiudad> {
         climaCiudad = MutableLiveData()
         ClimaClient.obtenerCliente().consultarClimaCiudad(idCiudad)

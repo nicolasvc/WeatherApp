@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@drawable/border_grid_layout"
     app:columnCount="2"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -19,7 +18,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        app:cardElevation="8dp"
+        style="@style/CardViewTransparente"
         app:cardCornerRadius="8dp">
 
         <LinearLayout
@@ -41,6 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:textColor="@color/white"
                 android:text="@string/temperatura"/>
 
             <TextView
@@ -48,8 +48,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:textSize="18sp"
-                android:textColor="@color/black" />
+                android:textColor="@color/white"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -63,7 +63,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        app:cardElevation="8dp"
+        style="@style/CardViewTransparente"
         app:cardCornerRadius="8dp">
 
         <LinearLayout
@@ -84,15 +84,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="@string/visibilidad"/>
 
             <TextView
                 android:id="@+id/tvvisibilidad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:layout_margin="10dp"
-                android:textSize="18sp"
-                android:textColor="@color/black" />
+                android:textSize="18sp" />
 
 
         </LinearLayout>
@@ -107,7 +108,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        app:cardElevation="8dp"
+        style="@style/CardViewTransparente"
         app:cardCornerRadius="8dp">
 
         <LinearLayout
@@ -128,6 +129,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="@string/presi_n"/>
 
             <TextView
@@ -135,8 +137,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:textSize="18sp"
-                android:textColor="@color/black" />
+                android:textColor="@color/white"
+                android:textSize="18sp" />
 
 
         </LinearLayout>
@@ -147,12 +149,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_columnWeight="1"
-
         app:layout_rowWeight="1"
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        app:cardElevation="8dp"
+        style="@style/CardViewTransparente"
         app:cardCornerRadius="8dp">
 
         <LinearLayout
@@ -173,15 +174,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="@string/humedad"/>
 
             <TextView
                 android:id="@+id/tvvalorHumedad"
                 android:layout_width="wrap_content"
+                android:textColor="@color/white"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:textSize="18sp"
-                android:textColor="@color/black" />
+                android:textSize="18sp" />
 
 
         </LinearLayout>
@@ -196,7 +198,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        app:cardElevation="8dp"
+        style="@style/CardViewTransparente"
         app:cardCornerRadius="8dp">
 
         <LinearLayout
@@ -217,15 +219,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="@string/velocidad"/>
 
             <TextView
                 android:id="@+id/tvvalordireccionviento"
                 android:layout_width="wrap_content"
+                android:textColor="@color/white"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:textSize="18sp"
-                android:textColor="@color/black" />
+                android:textSize="18sp" />
 
 
         </LinearLayout>
@@ -240,7 +243,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        app:cardElevation="8dp"
+        style="@style/CardViewTransparente"
         app:cardCornerRadius="8dp">
 
         <LinearLayout
@@ -261,15 +264,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:textColor="@color/white"
                 android:text="@string/direcci_n_viento"/>
             <TextView
                 android:id="@+id/tvdirecconviento"
                 android:layout_width="wrap_content"
+                android:textColor="@color/white"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:textSize="18sp"
-                android:textColor="@color/black" />
+                android:textSize="18sp" />
 
 
         </LinearLayout>

@@ -35,6 +35,9 @@ class PreferenciasManager {
             .apply()
     }
 
+    fun limpiar() {
+        preferenciasDispositivo.edit().clear().apply()
+    }
 
 
     fun <T> obtener(@NonNull llave: String?, tipoClase: Class<T>?): T? {

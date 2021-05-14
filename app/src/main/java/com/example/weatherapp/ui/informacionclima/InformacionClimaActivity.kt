@@ -5,43 +5,80 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.example.weatherapp.R
-import com.example.weatherapp.entidades.busquedaciudad.CiudadBuscada
 import com.example.weatherapp.entidades.climaciudad.ClimaCiudad
 import com.example.weatherapp.entidades.climaciudad.ConsolidatedWeather
+import com.example.weatherapp.origendatos.room.entidades.CiudadConClimaDataClass
 import com.example.weatherapp.origendatos.room.entidades.CiudadSeleccionadaEntity
+import com.example.weatherapp.origendatos.room.entidades.ClimaCiudadDiaEntity
 import com.example.weatherapp.origendatos.viewmodel.CiudadElegidaViewModel
 import com.example.weatherapp.origendatos.viewmodel.InformacionClimaViewModel
 import com.example.weatherapp.transversales.constantes.ConstantesCompartidas
 import com.example.weatherapp.transversales.constantes.ConstantesPreferencias
 import com.example.weatherapp.transversales.preferencias.PreferenciasManager
 import com.example.weatherapp.ui.consultarclimaciudad.ConsultaCiudadClimaActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.grid_layout_detalle_clima.*
-import kotlinx.android.synthetic.main.toolbar_base.*
+import kotlinx.android.synthetic.main.viewpager_weather.*
+import java.util.*
 
 
-class InformacionClimaActivity : AppCompatActivity() {
+class InformacionClimaActivity : AppCompatActivity(), ViewPageAdapter.IcallbackSweep {
 
     //region Propiedades
     private lateinit var informacionClimaViewModel: InformacionClimaViewModel
     private lateinit var ciudadesElegidaViewModel: CiudadElegidaViewModel
-    private var isNuevaCiudad:Boolean = false
+    private lateinit var viewPageAdapter: ViewPageAdapter
+    private var isCiudadNueva: Boolean = false
+    private lateinit var listaCiudadComplete: List<CiudadConClimaDataClass>
     //endregion
 
 
     //region Sobrecarga
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        configurarToolbar()
+        setContentView(R.layout.viewpager_weather)
+        iniciarViewPager()
         iniciarViewModel()
-        verificarCiudadElegida()
+        validarCiudadesConsultadas()
+        consultarCiudadesNuevas()
+        supportActionBar?.setBackgroundDrawable(applicationContext.getDrawable(R.drawable.backgroundtransparente))
     }
+
+    private fun validarCiudadesConsultadas() {
+        if (PreferenciasManager.obtenerInstancia()
+                .obtener(ConstantesPreferencias.USUARIO_TIENE_CIUDADES, String()::class.java)
+                .isNullOrEmpty()
+        )
+            navegarSeleccionCiudad()
+    }
+
+    private fun consultarCiudadesNuevas() {
+        ciudadesElegidaViewModel.getAllCiudadesClima().observe(this, {
+            validarCiudadesNuevas(it)
+        })
+    }
+
+
+    private fun validarCiudadesNuevas(listaCiudadConClima: List<CiudadConClimaDataClass>?) {
+        listaCiudadComplete = listaCiudadConClima!!
+        viewPageAdapter.setListaCiudades(listaCiudadConClima)
+        viewPageAdapter.notifyDataSetChanged()
+        if (isCiudadNueva)
+            viewPager2.setCurrentItem(listaCiudadConClima.size, false)
+    }
+
+
+    private fun iniciarViewPager() {
+        listaCiudadComplete = LinkedList()
+        viewPageAdapter = ViewPageAdapter(listaCiudadComplete, this, this)
+        viewPager2.adapter = viewPageAdapter
+        viewPager2.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_busqueda_ciudad, menu)
@@ -63,21 +100,15 @@ class InformacionClimaActivity : AppCompatActivity() {
         ciudadesElegidaViewModel = ViewModelProvider(this).get(CiudadElegidaViewModel::class.java)
     }
 
-    private fun verificarCiudadElegida() {
-        val ciudadElegida = PreferenciasManager.obtenerInstancia()
-            .obtener(ConstantesPreferencias.CIUDAD_BUSCADA_USUARIO, CiudadBuscada::class.java)
-        if (ciudadElegida != null)
-            consultarClimaCiudad(ciudadElegida.woeid.toString())
-        else
-            navegarSeleccionCiudad()
-    }
-
 
     private var resultadoActividad =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
                 val idCiudad = data!!.getStringExtra(ConstantesCompartidas.LLAVE_ID_CIUDAD_INTENT)
+                isCiudadNueva = true
+                PreferenciasManager.obtenerInstancia()
+                    .almacenar(ConstantesPreferencias.USUARIO_TIENE_CIUDADES, true)
                 consultarClimaCiudad(idCiudad!!)
             }
         }
@@ -89,60 +120,82 @@ class InformacionClimaActivity : AppCompatActivity() {
     }
 
 
-    private fun configurarToolbar() {
-        setSupportActionBar(toolbar)
-    }
-
     private fun consultarClimaCiudad(idCiudad: String) {
+        val indiceCiudadConsultada =
+            listaCiudadComplete.indexOfFirst { ciudadConClimaDataClass -> ciudadConClimaDataClass.ciudad.idCiudad == idCiudad }
+        if (indiceCiudadConsultada != -1) {
+            viewPager2.setCurrentItem(indiceCiudadConsultada, false)
+            return
+        }
+        layoutProgress.visibility = View.VISIBLE
         informacionClimaViewModel.obtenerClimaCiudad(idCiudad).observe(
             this, { climaCiudad ->
                 almacenarCiudad(climaCiudad)
-                llenarInformacionUI(climaCiudad!!)
-                llenarRecyclerView(climaCiudad.consolidatedWeather)
+                almacenarClimaCiudad(climaCiudad.consolidatedWeather, climaCiudad.woeid.toString())
+                layoutProgress.visibility = View.GONE
             }
         )
     }
 
-    private fun almacenarCiudad(climaCiudad: ClimaCiudad){
-        if(isNuevaCiudad){
-            val ciudadEntity = CiudadSeleccionadaEntity(
-                climaCiudad.consolidatedWeather[0].theTemp.toInt(),
-                climaCiudad.consolidatedWeather[0].weatherStateName,
-                climaCiudad.woeid.toString(),
-                climaCiudad.title
+    private fun almacenarClimaCiudad(
+        consolidatedWeather: List<ConsolidatedWeather>,
+        woidCiudad: String
+    ) {
+        consolidatedWeather.forEach { clima ->
+            ciudadesElegidaViewModel.insertClimaCiudad(
+                obtenerClimaCiudad(clima, woidCiudad)
             )
-            ciudadesElegidaViewModel.insertCiudad(ciudadEntity)
         }
-
     }
 
-
-    private fun llenarRecyclerView(consolidatedWeather: List<ConsolidatedWeather>) {
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        val adaptador = RecyclerViewClimaAdapter(consolidatedWeather, this)
-        recyclerView.adapter = adaptador
-        adaptador.notifyDataSetChanged()
-    }
-
-    private fun llenarInformacionUI(climaCiudad: ClimaCiudad) {
-        val climaConsolidado = climaCiudad.consolidatedWeather[0]
-        nombreCiudad.text = climaCiudad.title
-        tv_fecha_dipositivo.text = climaConsolidado.applicableDate
-        tv_temperatura_ciudad.text = String.format("%s°", climaConsolidado.theTemp.toInt())
-        tv_temperatura_max_min.text = String.format(
-            " %s°  %s° ",
-            climaConsolidado.minTemp.toInt(),
-            climaConsolidado.maxTemp.toInt()
+    private fun obtenerClimaCiudad(
+        consolidatedWeather: ConsolidatedWeather,
+        woidCiudad: String
+    ): ClimaCiudadDiaEntity {
+        return ClimaCiudadDiaEntity(
+            consolidatedWeather.airPressure,
+            consolidatedWeather.applicableDate,
+            consolidatedWeather.created,
+            consolidatedWeather.humidity,
+            consolidatedWeather.maxTemp,
+            consolidatedWeather.minTemp,
+            consolidatedWeather.predictability,
+            consolidatedWeather.theTemp,
+            consolidatedWeather.visibility,
+            consolidatedWeather.weatherStateAbbr,
+            consolidatedWeather.weatherStateName,
+            consolidatedWeather.windDirection,
+            consolidatedWeather.windSpeed,
+            consolidatedWeather.windDirectionCompass,
+            woidCiudad
         )
-        tv_estado_ciudad.text = climaConsolidado.weatherStateName
-        tvvalortemperatura.text = String.format("%s°", climaConsolidado.theTemp.toInt())
-        tv_cantidad_dias_clima.text =
-            String.format("%s Dias reporte del clima", climaCiudad.consolidatedWeather.size)
-        tvvisibilidad.text = String.format("%s km", climaConsolidado.visibility.toInt())
-        tvpresionaire.text = String.format("%s hPa", climaConsolidado.airPressure.toInt())
-        tvvalorHumedad.text = String.format("%s", climaConsolidado.humidity)
-        tvvalordireccionviento.text = String.format("%s Km/h", climaConsolidado.windSpeed.toInt())
-        tvdirecconviento.text = climaConsolidado.windDirectionCompass
+    }
+
+    private fun almacenarCiudad(climaCiudad: ClimaCiudad) {
+        ciudadesElegidaViewModel.insertCiudad(obtenerciudadEntity(climaCiudad))
+    }
+
+    private fun obtenerciudadEntity(climaCiudad: ClimaCiudad): CiudadSeleccionadaEntity {
+        return CiudadSeleccionadaEntity(
+            climaCiudad.consolidatedWeather[0].theTemp.toInt(),
+            climaCiudad.consolidatedWeather[0].weatherStateName,
+            climaCiudad.woeid.toString(),
+            climaCiudad.title,
+            climaCiudad.consolidatedWeather[0].weatherStateAbbr
+        )
+    }
+
+
+    //endregion
+
+    //region Callback ViewPageAdapter
+    override fun consultarCiudad(idCiudad: String) {
+        informacionClimaViewModel.obtenerClimaCiudad(idCiudad).observe(
+            this, { climaCiudad ->
+                ciudadesElegidaViewModel.updateCiudad(obtenerciudadEntity(climaCiudad))
+                //almacenarClimaCiudad(climaCiudad.consolidatedWeather, climaCiudad.woeid.toString())
+            }
+        )
     }
     //endregion
 }

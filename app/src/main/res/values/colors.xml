@@ -8,7 +8,15 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="colorclimadia">#3f8fd5</color>
+    <color name="colorclimadia">#5ea7d8</color>
     <color name="colorclimaNoche">#FFFFFFFF</color>
+    <color name="semiTransparentColor">#20ffffff</color>
+
+
+        <color name="color_primary">#212121</color>
+        <color name="color_primary_dark">@android:color/black</color>
+        <color name="color_accent">#4285F4</color>
+        <color name="semi_transparent">#66000000</color>
+
 
 </resources>

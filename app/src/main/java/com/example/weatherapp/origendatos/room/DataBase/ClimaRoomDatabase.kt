@@ -6,9 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.weatherapp.origendatos.room.Dao.ClimaDao
 import com.example.weatherapp.origendatos.room.entidades.CiudadSeleccionadaEntity
+import com.example.weatherapp.origendatos.room.entidades.ClimaCiudadDiaEntity
 
 
-@Database(entities = [CiudadSeleccionadaEntity::class], version = 1)
+@Database(entities = [CiudadSeleccionadaEntity::class,ClimaCiudadDiaEntity::class], version = 2)
 abstract class ClimaRoomDatabase : RoomDatabase() {
     abstract fun climaDao(): ClimaDao
 
@@ -23,7 +24,7 @@ abstract class ClimaRoomDatabase : RoomDatabase() {
         }
 
         private fun builDataBase(context: Context) =
-            Room.databaseBuilder(context, ClimaRoomDatabase::class.java, "notas_database").build()
+            Room.databaseBuilder(context, ClimaRoomDatabase::class.java, "clima_database").build()
     }
 
 }

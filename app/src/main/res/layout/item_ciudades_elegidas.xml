@@ -17,7 +17,7 @@
     <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
         android:id="@+id/flexBoxcontenedor"
-        android:background="@color/colorclimadia"
+        android:background="@drawable/background_clear"
         android:layout_height="wrap_content">
 
         <com.google.android.flexbox.FlexboxLayout
@@ -39,8 +39,8 @@
                     android:id="@+id/tv_temperatura_ciudad_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_flexBasisPercent="20%"
-                    android:gravity="left"
+                    app:layout_flexBasisPercent="30%"
+                    android:gravity="start"
                     android:textSize="25sp"
                     android:layout_marginStart="15dp"
                     android:textColor="@color/white"
@@ -51,7 +51,7 @@
                     android:id="@+id/tv_nombre_ciudad_elegida"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_flexBasisPercent="80%"
+                    app:layout_flexBasisPercent="70%"
                     android:gravity="end"
                     android:textSize="14sp"
                     android:textColor="@color/white"

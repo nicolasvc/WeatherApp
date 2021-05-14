@@ -3,6 +3,7 @@
     package="com.example.weatherapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:name=".di.application.MyApp"
@@ -11,7 +12,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.WeatherApp"
+        android:theme="@style/MainTheme"
+
         android:usesCleartextTraffic="true">
         <activity android:name=".ui.consultarclimaciudad.ConsultaCiudadClimaActivity"
             android:label="Ciudades elegidas"/>

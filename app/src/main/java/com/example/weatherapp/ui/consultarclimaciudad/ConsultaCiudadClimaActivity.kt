@@ -12,7 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapp.R
+import com.example.weatherapp.di.application.MyApp
 import com.example.weatherapp.entidades.busquedaciudad.CiudadBuscada
+import com.example.weatherapp.origendatos.room.entidades.CiudadConClimaDataClass
 import com.example.weatherapp.origendatos.room.entidades.CiudadSeleccionadaEntity
 import com.example.weatherapp.origendatos.viewmodel.CiudadElegidaViewModel
 import com.example.weatherapp.origendatos.viewmodel.InformacionClimaViewModel
@@ -24,7 +26,8 @@ import kotlinx.android.synthetic.main.activity_consulta_ciudad_clima.*
 import java.util.*
 
 
-class ConsultaCiudadClimaActivity : AppCompatActivity() {
+class ConsultaCiudadClimaActivity : AppCompatActivity(),
+    RecyclerViewCiudadesAdapter.IlistenerAdapter {
 
 
     //region Propiedades
@@ -38,6 +41,7 @@ class ConsultaCiudadClimaActivity : AppCompatActivity() {
     //region Sobrecarga
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        iniciarInyector()
         setContentView(R.layout.activity_consulta_ciudad_clima)
         configurarToolbar()
         iniciarViewModel()
@@ -68,7 +72,21 @@ class ConsultaCiudadClimaActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onBackPressed() {
+        if (validarCiudadesElegidas())
+            super.onBackPressed()
+    }
+
     //endregion
+
+    //region Inyeccion
+    private fun iniciarInyector() {
+        val aplicacion = application as MyApp
+        aplicacion.getComponent().inject(this)
+    }
+    //endregion
+
+
     //region Propios
 
     private fun iniciarListenerAutoComplete() {
@@ -88,16 +106,22 @@ class ConsultaCiudadClimaActivity : AppCompatActivity() {
     private fun validarCiudadUnica(posicionElegida: Int) {
         val ciudadPreseleccionada = listaActualConsultaCiudades[posicionElegida]
         val ciudadEnLista: CiudadSeleccionadaEntity? =
-            listaCiudadesElegidas.find { it.woeidCiudad == ciudadPreseleccionada.woeid.toString() }
+            listaCiudadesElegidas.find { it.idCiudad == ciudadPreseleccionada.woeid.toString() }
         if (ciudadEnLista == null)
-            finalizarActividadExitosamente(posicionElegida)
+            almacenarCiudadPreferencias(posicionElegida)
         else {
             consultarCiudades("s")
             autoCompleteCiudad.setText("")
             mostrarSnackBar("No se puede consultar la misma ciudad")
-
-
         }
+    }
+
+    private fun validarCiudadesElegidas(): Boolean {
+        return if (listaCiudadesElegidas.isNullOrEmpty()) {
+            mostrarSnackBar("Tienes que elegir al menos una ciudad")
+            false
+        } else
+            true
     }
 
     private fun mostrarMensajeConfirmacion() {
@@ -105,6 +129,8 @@ class ConsultaCiudadClimaActivity : AppCompatActivity() {
         dialogoCierre.setMessage("¿Quieres borrar todas las ciudades?")
             .setTitle("Eliminar ciudades")
         dialogoCierre.setPositiveButton("Eliminar") { dialog, _ ->
+            PreferenciasManager.obtenerInstancia().limpiar()
+            ciudadesElegidaViewModel.eliminarClimaCiudad()
             ciudadesElegidaViewModel.deleteAllCiudades()
             dialog.dismiss()
         }
@@ -114,18 +140,23 @@ class ConsultaCiudadClimaActivity : AppCompatActivity() {
 
     }
 
-    private fun finalizarActividadExitosamente(posicionElegida: Int) {
+    private fun almacenarCiudadPreferencias(posicionElegida: Int) {
         val ciudadElegida = listaActualConsultaCiudades[posicionElegida]
         PreferenciasManager.obtenerInstancia()
-            .almacenar(ConstantesPreferencias.CIUDAD_BUSCADA_USUARIO, ciudadElegida)
+            .almacenar(ConstantesPreferencias.USUARIO_TIENE_CIUDADES, ciudadElegida.woeid)
+        finalizarActividad(ciudadElegida.woeid.toString())
+    }
+
+    private fun finalizarActividad(woeid: String) {
         val intentCiudadElegida = Intent()
         intentCiudadElegida.putExtra(
             ConstantesCompartidas.LLAVE_ID_CIUDAD_INTENT,
-            ciudadElegida.woeid.toString()
+            woeid
         )
         setResult(RESULT_OK, intentCiudadElegida)
         finish()
     }
+
 
     private fun consultarCiudades(ciudad: String) {
         informacionClimaViewModel.obtenerCiudades(ciudad).observe(this, {
@@ -144,7 +175,7 @@ class ConsultaCiudadClimaActivity : AppCompatActivity() {
 
     private fun iniciarRecyclerView() {
         recyclerCiudadesElegidas.layoutManager = LinearLayoutManager(this)
-        adaptadorRecyclerView = RecyclerViewCiudadesAdapter(LinkedList(), this)
+        adaptadorRecyclerView = RecyclerViewCiudadesAdapter(LinkedList(), this, this)
         recyclerCiudadesElegidas.adapter = adaptadorRecyclerView
     }
 
@@ -180,9 +211,21 @@ class ConsultaCiudadClimaActivity : AppCompatActivity() {
 
 
     private fun configurarToolbar() {
-        setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        setSupportActionBar(findViewById(R.id.toolbar))
+        //   supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
+    //endregion
+
+    //region Callback Recyclerview
+    override fun onClickCiudad(ciudadElegida: CiudadSeleccionadaEntity) {
+        finalizarActividad(ciudadElegida.idCiudad)
+    }
+
+    //endregion
+
+
+    //region ContratosPresentador
 
     //endregion
 

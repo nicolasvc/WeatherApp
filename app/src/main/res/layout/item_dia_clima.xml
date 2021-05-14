@@ -10,12 +10,12 @@
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
     app:cardCornerRadius="5dp"
+    app:cardElevation="0dp"
+    style="@style/CardViewTransparente"
     android:orientation="horizontal">
-
 
     <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
-        android:background="@color/colorclimadia"
         android:layout_height="wrap_content">
 
         <com.google.android.flexbox.FlexboxLayout
@@ -41,7 +41,7 @@
                     android:layout_marginEnd="5dp"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:text="Dia clima" />
+                    android:text="@string/dia_clima" />
 
                 <TextView
                     android:id="@+id/tvdiasemanaclima"
@@ -52,7 +52,7 @@
                     android:textColor="@color/white"
                     android:layout_marginEnd="5dp"
                     android:gravity="center"
-                    android:text="Dia clima" />
+                    android:text="@string/dia_semana_clima" />
 
                 <ImageView
                     android:contentDescription="@string/estado_clima"
@@ -74,7 +74,7 @@
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:layout_marginEnd="5dp"
-                    android:text="Dia clima" />
+                    android:text="@string/estado_clima" />
 
                 <TextView
                     android:id="@+id/temperaturalmaxmin"
@@ -85,7 +85,7 @@
                     android:layout_marginStart="5dp"
                     android:textColor="@color/white"
                     android:layout_marginEnd="5dp"
-                    android:text="Dia clima" />
+                    android:text="@string/temperaturas" />
 
             </com.google.android.flexbox.FlexboxLayout>
         </com.google.android.flexbox.FlexboxLayout>

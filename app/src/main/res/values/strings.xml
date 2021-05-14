@@ -22,7 +22,6 @@
     <string name="valor_rayos_uv">Valor rayos uv</string>
     <string name="imagen_nube">Imagen nube</string>
     <string name="agregar_ciudad">Agregar ciudad</string>
-    <string name="estado_clima">Estado clima</string>
     <string name="ingresa_ciudad">Ingresa ciudad</string>
     <string name="cargando_clima">Cargando clima</string>
     <string name="eliminar_ciudades">Eliminar ciudades</string>
@@ -32,4 +31,8 @@
     <string name="velocidad">Velocidad</string>
     <string name="direccion_viento">Direccion viento</string>
     <string name="temp">Temp</string>
+    <string name="dia_clima">Dia clima</string>
+    <string name="dia_semana_clima">Dia semana clima</string>
+    <string name="estado_clima">Estado clima</string>
+    <string name="temperaturas">Temperaturas</string>
 </resources>

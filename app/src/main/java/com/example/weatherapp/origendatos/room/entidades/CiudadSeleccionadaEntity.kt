@@ -5,11 +5,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "CiudadesSeleccionadas")
 data class CiudadSeleccionadaEntity(
-    val temperaturaCiudad:Int,
-    val estadoClima:String,
-    val woeidCiudad:String,
-    val nombreciudad:String
-){
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
-}
+    val temperaturaCiudad: Int,
+    val estadoClima: String,
+    @PrimaryKey val idCiudad: String,
+    val nombreciudad: String,
+    val abreviaturaClima:String
+)
+
+

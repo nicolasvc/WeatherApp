@@ -13,6 +13,9 @@ interface ClimaOrigenDatos {
     @GET(ConstantesRetrofit.API_CONSULTA_CIUDAD)
     fun consultarListaCiudades(@Query("query") nombreCiudad:String): Single<List<CiudadBuscada>>
 
+    @GET(ConstantesRetrofit.API_CONSULTA_CIUDAD)
+    fun consultarListaCiudadesPorLatLng(@Query("lattlong") latlng:String): Single<List<CiudadBuscada>>
+
     @GET(ConstantesRetrofit.API_CONSULTA_CLIMA_CIUDAD)
     fun consultarClimaCiudad(@Path("idCiudad") idCiudad:String): Single<ClimaCiudad>
 }
