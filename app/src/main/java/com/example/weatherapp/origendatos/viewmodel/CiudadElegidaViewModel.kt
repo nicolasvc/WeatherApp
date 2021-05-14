@@ -15,11 +15,20 @@ class CiudadElegidaViewModel :ViewModel() {
 
     fun updateCiudad(ciudadSeleccionadaEntity: CiudadSeleccionadaEntity) = climaRepositorio.updateClima(ciudadSeleccionadaEntity)
 
+    fun deleteCiudadPorId(idCiudad: String) = climaRepositorio.eliminarCiudadPorId(idCiudad)
+
     fun deleteAllCiudades()= climaRepositorio.eliminarAllCiudades()
 
     fun getAllCiudadesClima() = climaRepositorio.getAllCiudadesConClima()
 
     fun insertClimaCiudad(climaCiudadDiaEntity: ClimaCiudadDiaEntity) = climaRepositorio.insertarClimaCiudad(climaCiudadDiaEntity)
 
-    fun eliminarClimaCiudad() = climaRepositorio.eliminarClimaPorCiudad()
+    fun eliminarAllClimasCiudades() = climaRepositorio.eliminarAllClimaCiudades()
+
+    fun eliminarClimaCiudad(idCiudad:String) = climaRepositorio.eleminarClimaCiudades(idCiudad)
+
+
+
+
+
 }

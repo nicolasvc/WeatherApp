@@ -22,6 +22,7 @@ import com.example.weatherapp.transversales.constantes.ConstantesCompartidas
 import com.example.weatherapp.transversales.constantes.ConstantesPreferencias
 import com.example.weatherapp.transversales.preferencias.PreferenciasManager
 import com.example.weatherapp.ui.consultarclimaciudad.ConsultaCiudadClimaActivity
+import kotlinx.android.synthetic.main.empty_citys.*
 import kotlinx.android.synthetic.main.viewpager_weather.*
 import java.util.*
 
@@ -43,17 +44,9 @@ class InformacionClimaActivity : AppCompatActivity(), ViewPageAdapter.IcallbackS
         setContentView(R.layout.viewpager_weather)
         iniciarViewPager()
         iniciarViewModel()
-        validarCiudadesConsultadas()
         consultarCiudadesNuevas()
+        listenerTextView()
         supportActionBar?.setBackgroundDrawable(applicationContext.getDrawable(R.drawable.backgroundtransparente))
-    }
-
-    private fun validarCiudadesConsultadas() {
-        if (PreferenciasManager.obtenerInstancia()
-                .obtener(ConstantesPreferencias.USUARIO_TIENE_CIUDADES, String()::class.java)
-                .isNullOrEmpty()
-        )
-            navegarSeleccionCiudad()
     }
 
     private fun consultarCiudadesNuevas() {
@@ -62,9 +55,18 @@ class InformacionClimaActivity : AppCompatActivity(), ViewPageAdapter.IcallbackS
         })
     }
 
+    private fun listenerTextView(){
+        textViewCrearCiudad.setOnClickListener { navegarSeleccionCiudad() }
+    }
+
 
     private fun validarCiudadesNuevas(listaCiudadConClima: List<CiudadConClimaDataClass>?) {
-        listaCiudadComplete = listaCiudadConClima!!
+        if (listaCiudadConClima.isNullOrEmpty()){
+            empycitys.visibility = View.VISIBLE
+            return
+        }
+        empycitys.visibility = View.GONE
+        listaCiudadComplete = listaCiudadConClima
         viewPageAdapter.setListaCiudades(listaCiudadConClima)
         viewPageAdapter.notifyDataSetChanged()
         if (isCiudadNueva)
@@ -106,6 +108,7 @@ class InformacionClimaActivity : AppCompatActivity(), ViewPageAdapter.IcallbackS
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
                 val idCiudad = data!!.getStringExtra(ConstantesCompartidas.LLAVE_ID_CIUDAD_INTENT)
+                empycitys.visibility = View.GONE
                 isCiudadNueva = true
                 PreferenciasManager.obtenerInstancia()
                     .almacenar(ConstantesPreferencias.USUARIO_TIENE_CIUDADES, true)

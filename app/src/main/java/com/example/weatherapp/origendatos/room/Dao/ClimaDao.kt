@@ -38,5 +38,12 @@ interface ClimaDao {
     fun updateClimaCiudad(ciudadConClimaDataClass: ClimaCiudadDiaEntity)
 
     @Query("DELETE FROM ClimaCiudadDia")
-    fun deleteClimaPorCiuda()
+    fun deleteAllClimaCiudad()
+
+
+    @Query("DELETE FROM ClimaCiudadDia where woeidCiudad = :idCiudad")
+    fun deleteClimaPorCiuda(idCiudad:String)
+
+
+
 }

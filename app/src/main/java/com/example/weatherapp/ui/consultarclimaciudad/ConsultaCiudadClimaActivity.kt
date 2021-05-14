@@ -8,20 +8,21 @@ import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
 import com.example.weatherapp.di.application.MyApp
 import com.example.weatherapp.entidades.busquedaciudad.CiudadBuscada
-import com.example.weatherapp.origendatos.room.entidades.CiudadConClimaDataClass
 import com.example.weatherapp.origendatos.room.entidades.CiudadSeleccionadaEntity
 import com.example.weatherapp.origendatos.viewmodel.CiudadElegidaViewModel
 import com.example.weatherapp.origendatos.viewmodel.InformacionClimaViewModel
 import com.example.weatherapp.transversales.constantes.ConstantesCompartidas
 import com.example.weatherapp.transversales.constantes.ConstantesPreferencias
 import com.example.weatherapp.transversales.preferencias.PreferenciasManager
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_consulta_ciudad_clima.*
 import java.util.*
 
@@ -49,8 +50,8 @@ class ConsultaCiudadClimaActivity : AppCompatActivity(),
         iniciarListenerAutoComplete()
         iniciarRecyclerView()
         consultarCiudadesElegidas()
+        iniciarTouchHelpeRecyclerView()
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -72,10 +73,6 @@ class ConsultaCiudadClimaActivity : AppCompatActivity(),
         return true
     }
 
-    override fun onBackPressed() {
-        if (validarCiudadesElegidas())
-            super.onBackPressed()
-    }
 
     //endregion
 
@@ -88,6 +85,34 @@ class ConsultaCiudadClimaActivity : AppCompatActivity(),
 
 
     //region Propios
+    private fun iniciarTouchHelpeRecyclerView(){
+        val touchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        touchHelper.attachToRecyclerView(recyclerCiudadesElegidas)
+    }
+
+    val itemTouchHelperCallback = object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                when(direction){
+                    ItemTouchHelper.LEFT->{
+                        val ciudadAEliminar = listaCiudadesElegidas[position]
+                        ciudadesElegidaViewModel.eliminarClimaCiudad(ciudadAEliminar.idCiudad)
+                        ciudadesElegidaViewModel.deleteCiudadPorId(ciudadAEliminar.idCiudad)
+                    }
+                    ItemTouchHelper.RIGHT->{
+                    }
+                }
+            }
+
+    }
+
+
 
     private fun iniciarListenerAutoComplete() {
         autoCompleteCiudad.addTextChangedListener(object : TextWatcher {
@@ -112,17 +137,11 @@ class ConsultaCiudadClimaActivity : AppCompatActivity(),
         else {
             consultarCiudades("s")
             autoCompleteCiudad.setText("")
-            mostrarSnackBar("No se puede consultar la misma ciudad")
+            mostrarToast("No se puede consultar la misma ciudad")
         }
     }
 
-    private fun validarCiudadesElegidas(): Boolean {
-        return if (listaCiudadesElegidas.isNullOrEmpty()) {
-            mostrarSnackBar("Tienes que elegir al menos una ciudad")
-            false
-        } else
-            true
-    }
+
 
     private fun mostrarMensajeConfirmacion() {
         val dialogoCierre = AlertDialog.Builder(this)
@@ -130,7 +149,7 @@ class ConsultaCiudadClimaActivity : AppCompatActivity(),
             .setTitle("Eliminar ciudades")
         dialogoCierre.setPositiveButton("Eliminar") { dialog, _ ->
             PreferenciasManager.obtenerInstancia().limpiar()
-            ciudadesElegidaViewModel.eliminarClimaCiudad()
+            ciudadesElegidaViewModel.eliminarAllClimasCiudades()
             ciudadesElegidaViewModel.deleteAllCiudades()
             dialog.dismiss()
         }
@@ -174,8 +193,9 @@ class ConsultaCiudadClimaActivity : AppCompatActivity(),
     }
 
     private fun iniciarRecyclerView() {
+        listaCiudadesElegidas = LinkedList()
         recyclerCiudadesElegidas.layoutManager = LinearLayoutManager(this)
-        adaptadorRecyclerView = RecyclerViewCiudadesAdapter(LinkedList(), this, this)
+        adaptadorRecyclerView = RecyclerViewCiudadesAdapter(listaCiudadesElegidas, this, this)
         recyclerCiudadesElegidas.adapter = adaptadorRecyclerView
     }
 
@@ -185,18 +205,18 @@ class ConsultaCiudadClimaActivity : AppCompatActivity(),
         ciudadesElegidaViewModel = ViewModelProvider(this).get(CiudadElegidaViewModel::class.java)
     }
 
-    private fun mostrarSnackBar(mensaje: String) {
-        Snackbar.make(
-            coordinatorContenedor,
+    private fun mostrarToast(mensaje: String) {
+        Toast.makeText(
+            this,
             mensaje,
-            Snackbar.LENGTH_LONG
+            Toast.LENGTH_LONG
         ).show()
     }
 
     private fun consultarCiudadesElegidas() {
         ciudadesElegidaViewModel.getAllCiudades().observe(this, {
             if (it.isEmpty()) {
-                mostrarSnackBar("Por favor ingresa una ciudad primero")
+                mostrarToast("Por favor ingresa una ciudad primero")
                 mostrarCiudadesElegidas(LinkedList())
             } else
                 mostrarCiudadesElegidas(it)

@@ -1,7 +1,6 @@
 package com.example.weatherapp.ui.consultarclimaciudad
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
 import com.example.weatherapp.origendatos.room.entidades.CiudadSeleccionadaEntity
 import com.example.weatherapp.transversales.utilidades.ObtenerRecursosHelper
-import com.example.weatherapp.ui.informacionclima.WeatherStatesEnum
 import com.google.android.flexbox.FlexboxLayout
 
 class RecyclerViewCiudadesAdapter(
@@ -36,7 +34,6 @@ class RecyclerViewCiudadesAdapter(
         holder.tvciudadelegida.text = ciudad.nombreciudad
         holder.tvtipoclima.text = ciudad.estadoClima
         holder.flexboxLayout.setBackgroundColor(ObtenerRecursosHelper.obtenerInstancia().obtenerDrawableBackgroundClima(ciudad.abreviaturaClima))
-        //holder.cardciudadelegida.setCardBackgroundColor(ObtenerRecursosHelper.obtenerInstancia().obtenerDrawableBackgroundClima(ciudad.abreviaturaClima))
         holder.cardciudadelegida.setOnClickListener {
             obtenerCiudadElegida(position)
         }
@@ -62,10 +59,6 @@ class RecyclerViewCiudadesAdapter(
     fun setListaCiudades(listaCiudades: List<CiudadSeleccionadaEntity>) {
         this.listaCiudades = listaCiudades
     }
-    //endregion
-
-    //region Propios
-
     //endregion
 
     private fun obtenerCiudadElegida(position: Int) {

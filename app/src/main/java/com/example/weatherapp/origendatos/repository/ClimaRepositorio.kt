@@ -50,10 +50,24 @@ class ClimaRepositorio {
         }
     }
 
-    fun eliminarClimaPorCiudad(){
+    fun eliminarCiudadPorId(idCiudad:String){
         val executor = Executors.newSingleThreadExecutor()
         executor.execute {
-            climaDao?.deleteClimaPorCiuda()
+            climaDao?.deletebyId(idCiudad.toInt())
+        }
+    }
+
+    fun eleminarClimaCiudades(idCiudad:String){
+        val executor = Executors.newSingleThreadExecutor()
+        executor.execute {
+            climaDao?.deleteClimaPorCiuda(idCiudad)
+        }
+    }
+
+    fun eliminarAllClimaCiudades(){
+        val executor = Executors.newSingleThreadExecutor()
+        executor.execute {
+            climaDao?.deleteAllClimaCiudad()
         }
     }
 
