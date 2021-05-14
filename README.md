@@ -36,6 +36,7 @@ Poder seleccionar multiples ciudades para visualizar el clima de esta , en el cu
 
 ## Imagenes aplicativo
 
+![SplashScreen](https://user-images.githubusercontent.com/40839023/118240928-2a556900-b461-11eb-875d-1bb2243db6b4.png)
 ![Captura](https://user-images.githubusercontent.com/40839023/118232648-7fd84880-b456-11eb-9ff5-763a953cceef.PNG)
 ![CapturaCiudades](https://user-images.githubusercontent.com/40839023/118232848-c62da780-b456-11eb-9392-5c83035c35ef.PNG)
 ![Day](https://user-images.githubusercontent.com/40839023/118232853-c75ed480-b456-11eb-936e-1c8a81312984.PNG)
