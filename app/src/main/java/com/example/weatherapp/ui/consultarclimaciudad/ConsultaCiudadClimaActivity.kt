@@ -23,6 +23,7 @@ import com.example.weatherapp.origendatos.viewmodel.InformacionClimaViewModel
 import com.example.weatherapp.transversales.constantes.ConstantesCompartidas
 import com.example.weatherapp.transversales.constantes.ConstantesPreferencias
 import com.example.weatherapp.transversales.preferencias.PreferenciasManager
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_consulta_ciudad_clima.*
 import java.util.*
 
@@ -101,15 +102,20 @@ class ConsultaCiudadClimaActivity : AppCompatActivity(),
                 val position = viewHolder.adapterPosition
                 when(direction){
                     ItemTouchHelper.LEFT->{
-                        val ciudadAEliminar = listaCiudadesElegidas[position]
-                        ciudadesElegidaViewModel.eliminarClimaCiudad(ciudadAEliminar.idCiudad)
-                        ciudadesElegidaViewModel.deleteCiudadPorId(ciudadAEliminar.idCiudad)
+                        eliminarCiudad(position)
                     }
                     ItemTouchHelper.RIGHT->{
+                        eliminarCiudad(position)
                     }
                 }
             }
+    }
 
+    private fun eliminarCiudad(posicionEliminada: Int){
+        val ciudadAEliminar = listaCiudadesElegidas[posicionEliminada]
+        ciudadesElegidaViewModel.eliminarClimaCiudad(ciudadAEliminar.idCiudad)
+        ciudadesElegidaViewModel.deleteCiudadPorId(ciudadAEliminar.idCiudad)
+        Snackbar.make(coordinatorContenedor,"Se elimino la ciudad ${ciudadAEliminar.nombreciudad}",Snackbar.LENGTH_LONG).show()
     }
 
 
@@ -232,8 +238,6 @@ class ConsultaCiudadClimaActivity : AppCompatActivity(),
 
     private fun configurarToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//        setSupportActionBar(findViewById(R.id.toolbar))
-        //   supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
     //endregion
 

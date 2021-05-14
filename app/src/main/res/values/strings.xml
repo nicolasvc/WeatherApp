@@ -36,5 +36,5 @@
     <string name="estado_clima">Estado clima</string>
     <string name="temperaturas">Temperaturas</string>
     <string name="ciudades_vacias">Ciudades vacias</string>
-    <string name="debes_ingresar_una_ciudad_dame_click_para_consultar_una">Debes ingresar una ciudad , !dame click para consultar una!</string>
+    <string name="debes_ingresar_una_ciudad_dame_click_para_consultar_una">Debes ingresar una ciudad , ¡ Dame click para consultar una !</string>
 </resources>
